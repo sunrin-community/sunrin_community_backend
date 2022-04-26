@@ -4,12 +4,12 @@ import User from '../models/user'
 
 const opts: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: config.jwtSecret
+    secretOrKey: config.jwtAccessToken
 }
 
 export default new Strategy(opts, async (payload, done) => {
     try {
-        const user = await User.findById(payload.id)
+        const user = await User.findById(payload.id).select('-password')
         if (user) {
             return done(null, user)
         }

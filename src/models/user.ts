@@ -2,13 +2,22 @@ import { model, Schema, Document } from 'mongoose'
 import bcrypt from 'bcrypt'
 
 export interface IUser extends Document {
-    email: string;
-    password: string;
-    joinDate: Date;
+    name: string
+    username: string
+    email: string
+    password: string
+    role: string
+    joinDate: Date
     comparePassword: (password: string) => Promise<Boolean>
 }
 
 const userSchema = new Schema({
+    name: {
+        type: String,
+    },
+    username: {
+        type: String,
+    },
     email: {
         type: String,
         unique: true,
@@ -24,22 +33,22 @@ const userSchema = new Schema({
         required: true,
         default: "user"
     },
-    joinDate: {
-        type: Date,
-        default: Date.now(),
-    }
-})
+    avatar: {
+        type: String,
+        default: "/images/blank_profile.png"
+    },
+}, {timestamps: true})
 
 userSchema.pre<IUser>('save', async function (next) {
-    const user = this;
-    if (!user.isModified('password')) return next();
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user.password, salt);
-    user.password = hash;
+    const user = this
+    if (!user.isModified('password')) return next()
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(user.password, salt)
+    user.password = hash
 });
 
 userSchema.methods.comparePassword = async function (password: string) {
-    return await bcrypt.compare(password, this.password);
+    return await bcrypt.compare(password, this.password)
 }
 
-export default model<IUser>('User', userSchema);
+export default model<IUser>('User', userSchema)

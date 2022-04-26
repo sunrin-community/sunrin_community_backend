@@ -3,8 +3,8 @@ import passport from 'passport'
 
 const router = Router()
 
-router.get('/special', passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.send('success')
+router.get('/test', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.send(req.body.user)
 })
 
 export default router

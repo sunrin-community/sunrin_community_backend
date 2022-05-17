@@ -7,6 +7,7 @@ export interface IUser extends Document {
     email: string
     password: string
     role: string
+    thumbnail: string
     joinDate: Date
     comparePassword: (password: string) => Promise<Boolean>
 }
@@ -33,10 +34,13 @@ const userSchema = new Schema({
         required: true,
         default: "user"
     },
-    avatar: {
+    thumbnail: {
         type: String,
         default: "/images/blank_profile.png"
     },
+    likedPost: [{
+        type: String,
+    }]
 }, {timestamps: true})
 
 userSchema.pre<IUser>('save', async function (next) {

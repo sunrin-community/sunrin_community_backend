@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import passportMiddleWare from './middlewares/passport'
 
 import authRoutes from './routes/auth.routes'
+import postRoutes from './routes/post.routes'
 import testRoutes from './routes/test.routes'
 
 // initalizations
@@ -32,7 +33,8 @@ app.get('/', (req, res) => {
     res.send(`The API is at http://localhost:${app.get('port')}`)
 })
 
-app.use(authRoutes)
+app.use('/auth',authRoutes)
+app.use('/post',postRoutes)
 app.use(testRoutes)
 
 export default app
